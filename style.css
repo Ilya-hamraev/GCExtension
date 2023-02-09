@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+}
+
+.container {
+  width: 400px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title {
+  color: red;
+}
+
+.categories {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.category {
+  cursor: pointer;
+  margin: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 19px;
+  background: #ffffff;
+  box-shadow: 8px 8px 16px #dedede, -8px -8px 16px #ffffff;
+}
