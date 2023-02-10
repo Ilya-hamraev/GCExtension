@@ -1,13 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   margin: 0;
   padding: 0;
 }
 
 .wrapper {
+  padding: 20px;
 }
 
 .container {
   width: 400px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
 }
 
 .text-center {
@@ -32,4 +42,18 @@ body {
   border-radius: 19px;
   background: #ffffff;
   box-shadow: 8px 8px 16px #dedede, -8px -8px 16px #ffffff;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-form.hidden {
+  display: none;
+}
+
+.button {
+  cursor: pointer;
+  width: fit-content;
 }

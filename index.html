@@ -9,30 +9,56 @@
   <body>
     <div class="wrapper">
       <div class="container">
-        <h2 class="title text-center">My bookmarks</h2>
+        <h2 class="title text-center mb10">My bookmarks</h2>
         <section>
-          <div class="categories">
-            <div class="category">1</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
-            <div class="category">1</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
-            <div class="category">1</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
-            <div class="category">1</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
-            <div class="category">1</div>
-            <div class="category">2</div>
-            <div class="category">3</div>
+          <div class="block">
+            <button type="button" class="button button_show mb10">
+              Add new category
+            </button>
+            <form class="create-form hidden">
+              <input
+                class="create-form__input-name mb10"
+                placeholder="enter name category"
+                type="text"
+                value=""
+              />
+              <input
+                class="create-form__input-icon mb10"
+                placeholder="paste link"
+                type="text"
+                value=""
+              />
+              <input
+                class="create-form__input-icon mb10"
+                placeholder="paste icon link"
+                type="text"
+                value=""
+              />
+              <button type="submit" class="button button_create">Create</button>
+            </form>
           </div>
+          <!-- <div class="categories">
+            <div class="category">1</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+            <div class="category">1</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+            <div class="category">1</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+            <div class="category">1</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+            <div class="category">1</div>
+            <div class="category">2</div>
+            <div class="category">3</div>
+          </div> -->
         </section>
       </div>
     </div>
   </body>
-  <script src="./script.js" />
+  <script src="./script.js"></script>
 </html>
