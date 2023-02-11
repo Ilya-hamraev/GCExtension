@@ -2,44 +2,49 @@ const configClasses = {
   hidden: "hidden",
 };
 
-// function init() {
-//     const fromStorage = localStorage.getItem("myBookmarksExtension");
-//     if (fromStorage) {
-//       document.querySelector(".todo__items").innerHTML = fromStorage;
-//     }
-//     document
-//       .querySelector(".todo__options")
-//       .addEventListener("change", this.update);
-//     document.addEventListener("click", this.action.bind(this));
-//   }
-
-// methods.init()
-
-const initialBookmarks = [
-  {
-    category: "test",
-    icon: "",
-    values: [{ name: "", link: "" }],
-  },
-
-  {
-    category: "feff",
-    icon: "",
-    values: [{ name: "", link: "" }],
-  },
+let bookmarks = [
+  //   {
+  //     category: "test",
+  //     icon: "",
+  //     values: [{ name: "", link: "" }],
+  //   },
+  //   {
+  //     category: "feff",
+  //     icon: "",
+  //     values: [{ name: "", link: "" }],
+  //   },
 ];
 
 const btnShow = document.querySelector(".button_show");
 const btnCreateBookmarks = document.querySelector(".button_create");
 const formCreateBookmarks = document.querySelector(".create-form");
 const categories = document.querySelector(".categories");
+const listLinks = document.querySelector(".list-links");
 const inputName = document.querySelector(".create-form__input-name");
 const inputIcon = document.querySelector(".create-form__input-icon");
+
+function init() {
+  const fromStorage = localStorage.getItem("myBookmarksExtension");
+
+  if (fromStorage) {
+    bookmarks = JSON.parse(fromStorage);
+  }
+}
+
+init();
 
 const getFirstSymbol = (string) => string.slice(0, 1);
 
 const createCategory = (name, icon) => {
-  return `<li class='category'>${getFirstSymbol(name)}</li>`;
+  return `<li class='category' data-category=${name}>${getFirstSymbol(
+    name
+  )}</li>`;
+};
+
+const createLink = ({ link, name }) => {
+  return `<li class='list-links__link'>
+    <a href=${link} target='_blank'>${name}</a>
+  </li>`;
 };
 
 const clearInputsValues = () => {
@@ -48,7 +53,7 @@ const clearInputsValues = () => {
 };
 
 const update = () => {
-  categories.innerHTML = initialBookmarks
+  categories.innerHTML = bookmarks
     .map((el) => createCategory(el.category))
     .join("");
 };
@@ -66,17 +71,42 @@ const toggleShowHide = (node) => {
   classList.add(configClasses.hidden);
 };
 
-const handelSubmit = (e) => {
-  e.preventDefault;
+const addCategory = (category) => {
+  bookmarks.push(category);
+  localStorage.setItem("myBookmarksExtension", JSON.stringify(bookmarks));
+  update();
+};
+
+const handelSubmit = (event) => {
+  event.preventDefault;
   const formData = new FormData(formCreateBookmarks);
   const { name, icon } = Object.fromEntries(formData);
   const newCategory = { category: name, icon };
 
-  initialBookmarks.push(newCategory);
+  addCategory(newCategory);
   toggleShowHide(formCreateBookmarks);
-  update();
   clearInputsValues();
 };
 
+const handleOpenCategory = (event) => {
+  let target = event.target;
+
+  if (target.tagName != "LI") return;
+
+  showLinksCategory(target);
+};
+
+const showLinksCategory = (category) => {
+  const getCategory = category.getAttribute("data-category");
+  const filteredList = bookmarks.find((el) => el.category === getCategory);
+
+  if (filteredList) {
+    listLinks.innerHTML = filteredList.values
+      .map((link) => createLink(link))
+      .join("");
+  }
+};
+
 btnShow.addEventListener("click", () => toggleShowHide(formCreateBookmarks));
+categories.addEventListener("click", handleOpenCategory);
 btnCreateBookmarks.addEventListener("click", handelSubmit);
