@@ -1,11 +1,19 @@
 {
-  "manifest_version": 3,
   "name": "my bookmarks",
   "version": "1.0.0",
+  "manifest_version": 3,
   "author": "Ilya Khamraev",
   "action": {
     "default_popup": "index.html",
-    "default_title": "My bookmarks"
+    "default_title": "My bookmarks",
+    "default_icon": "./icon-bookmark.png"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+
+  "web_accessible_resources": [
+    {
+      "matches": ["<all_urls>"],
+      "resources": ["./script.js", "./helpers.js"]
+    }
+  ]
 }
