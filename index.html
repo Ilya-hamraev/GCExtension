@@ -12,32 +12,58 @@
         <h2 class="title text-center mb10">My bookmarks</h2>
         <section>
           <div class="controllers">
-            <button type="button" class="button button_show mb10">
+            <button type="button" class="button button_add_category mb10">
               Add new category
             </button>
-            <form class="create-form hidden">
-              <input
-                class="create-form__input-name mb10"
-                placeholder="enter name category"
-                name="name"
-                type="text"
-                value=""
-              />
-              <input
-                class="create-form__input-icon mb10"
-                placeholder="paste icon link"
-                name="icon"
-                type="text"
-                value=""
-              />
-              <button type="button" class="button button_create">Create</button>
-            </form>
+            <button type="button" class="button button_add_bookmark mb10">
+              Add new link
+            </button>
+            <button type="button" class="button button_back mb10">Back</button>
           </div>
+          <form class="create-form create-form-category hidden">
+            <input
+              class="create-form-category__input-name mb10"
+              placeholder="enter name category"
+              name="name"
+              type="text"
+              value=""
+            />
+            <input
+              class="create-form-category__input-icon mb10"
+              placeholder="paste icon category"
+              name="icon"
+              type="text"
+              value=""
+            />
+            <button type="button" class="button button_create_category">
+              Create
+            </button>
+          </form>
+          <form class="create-form create-form-bookmark hidden">
+            <input
+              class="create-form-bookmark__input-name mb10"
+              placeholder="enter name link"
+              name="name"
+              type="text"
+              value=""
+            />
+            <input
+              class="create-form-bookmark__input-link mb10"
+              placeholder="paste link"
+              name="link"
+              type="text"
+              value=""
+            />
+            <button type="button" class="button button_create_bookmark">
+              Create
+            </button>
+          </form>
           <ul class="categories"></ul>
           <ul class="list-links"></ul>
         </section>
       </div>
     </div>
   </body>
-  <script src="./script.js"></script>
+  <script type="module" src="./helpers.js"></script>
+  <script type="module" src="./script.js"></script>
 </html>

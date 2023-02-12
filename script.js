@@ -1,3 +1,7 @@
+import { getFirstSymbol } from "./helpers.js";
+
+let opendCategory = "";
+
 const configClasses = {
   hidden: "hidden",
 };
@@ -14,26 +18,31 @@ let bookmarks = [
   //     values: [{ name: "", link: "" }],
   //   },
 ];
-
-const btnShow = document.querySelector(".button_show");
-const btnCreateBookmarks = document.querySelector(".button_create");
-const formCreateBookmarks = document.querySelector(".create-form");
+const btnBack = document.querySelector(".button_back");
+const btnShowFormCrateCategory = document.querySelector(".button_add_category");
+const btnShowFormCrateBookmark = document.querySelector(".button_add_bookmark");
+const btnCreateCategory = document.querySelector(".button_create_category");
+const btnCreateBookmark = document.querySelector(".button_create_bookmark");
+const formCreateCategory = document.querySelector(".create-form-category");
+const formCreateBookmark = document.querySelector(".create-form-bookmark");
 const categories = document.querySelector(".categories");
 const listLinks = document.querySelector(".list-links");
-const inputName = document.querySelector(".create-form__input-name");
-const inputIcon = document.querySelector(".create-form__input-icon");
+const inputNameCategory = document.querySelector(
+  ".create-form-category__input-name"
+);
+const inputIconCategory = document.querySelector(
+  ".create-form-category__input-icon"
+);
 
-function init() {
+const init = () => {
   const fromStorage = localStorage.getItem("myBookmarksExtension");
 
   if (fromStorage) {
     bookmarks = JSON.parse(fromStorage);
   }
-}
+};
 
 init();
-
-const getFirstSymbol = (string) => string.slice(0, 1);
 
 const createCategory = (name, icon) => {
   return `<li class='category' data-category=${name}>${getFirstSymbol(
@@ -48,19 +57,23 @@ const createLink = ({ link, name }) => {
 };
 
 const clearInputsValues = () => {
-  inputName.value = "";
-  inputIcon.value = "";
+  inputNameCategory.value = "";
+  inputIconCategory.value = "";
 };
 
-const update = () => {
+const updateListLinks = (arr) => {
+  listLinks.innerHTML = arr.map((link) => createLink(link)).join("");
+};
+
+const updateCategories = () => {
   categories.innerHTML = bookmarks
     .map((el) => createCategory(el.category))
     .join("");
 };
 
-update();
+updateCategories();
 
-const toggleShowHide = (node) => {
+const toggleShowForm = (node) => {
   const classList = node.classList;
   const arrayClassList = Array.from(classList);
 
@@ -71,42 +84,69 @@ const toggleShowHide = (node) => {
   classList.add(configClasses.hidden);
 };
 
+const handleBack = () => {
+  opendCategory = "";
+};
+
 const addCategory = (category) => {
   bookmarks.push(category);
   localStorage.setItem("myBookmarksExtension", JSON.stringify(bookmarks));
-  update();
+  updateCategories();
 };
 
-const handelSubmit = (event) => {
+const addBookmark = (bookamark) => {
+  console.log(bookamark);
+};
+
+const handleCreateCategory = (event) => {
   event.preventDefault;
-  const formData = new FormData(formCreateBookmarks);
+  const formData = new FormData(formCreateCategory);
   const { name, icon } = Object.fromEntries(formData);
   const newCategory = { category: name, icon };
 
   addCategory(newCategory);
-  toggleShowHide(formCreateBookmarks);
+  toggleShowForm(formCreateCategory);
   clearInputsValues();
 };
 
-const handleOpenCategory = (event) => {
-  let target = event.target;
+const handleCreateBookmark = (event) => {
+  event.preventDefault;
+  const formData = new FormData(formCreateBookmark);
+  const { name, link } = Object.fromEntries(formData);
 
-  if (target.tagName != "LI") return;
-
-  showLinksCategory(target);
+  console.log(name, link);
 };
 
-const showLinksCategory = (category) => {
-  const getCategory = category.getAttribute("data-category");
-  const filteredList = bookmarks.find((el) => el.category === getCategory);
+const handleOpenCategory = (event) => {
+  const target = event.target;
 
-  if (filteredList) {
-    listLinks.innerHTML = filteredList.values
-      .map((link) => createLink(link))
-      .join("");
+  if (target.tagName === "LI") {
+    const category = target.getAttribute("data-category");
+    opendCategory = category;
+    showLinksCategory(category);
   }
 };
 
-btnShow.addEventListener("click", () => toggleShowHide(formCreateBookmarks));
+const showLinksCategory = (category) => {
+  const filteredList = bookmarks.find((el) => el.category === category);
+
+  if (filteredList.values) {
+    updateListLinks(filteredList.values);
+  }
+};
+
+btnShowFormCrateCategory.addEventListener("click", () =>
+  toggleShowForm(formCreateCategory)
+);
+
+btnShowFormCrateBookmark.addEventListener("click", () =>
+  toggleShowForm(formCreateBookmark)
+);
+
 categories.addEventListener("click", handleOpenCategory);
-btnCreateBookmarks.addEventListener("click", handelSubmit);
+
+btnCreateCategory.addEventListener("click", handleCreateCategory);
+
+btnCreateBookmark.addEventListener("click", handleCreateBookmark);
+
+btnBack.addEventListener("click", handleBack);
