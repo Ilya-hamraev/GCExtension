@@ -9,16 +9,25 @@
   <body>
     <div class="wrapper">
       <div class="container">
-        <h2 class="title text-center mb10">My bookmarks</h2>
+        <h2 class="title text-center mb10">
+          My bookmarks
+          <image class="title__icon" src="./icon-bookmark.png" />
+        </h2>
+        <h3 class="subtitle hidden"></h3>
         <section>
           <div class="controllers">
             <button type="button" class="button button_add_category mb10">
               Add new category
             </button>
-            <button type="button" class="button button_add_bookmark mb10">
+            <button
+              type="button"
+              class="button button_add_bookmark mb10 hidden"
+            >
               Add new link
             </button>
-            <button type="button" class="button button_back mb10">Back</button>
+            <button type="button" class="button button_back mb10 hidden">
+              Back
+            </button>
           </div>
           <form class="create-form create-form-category hidden">
             <input
@@ -59,7 +68,7 @@
             </button>
           </form>
           <ul class="categories"></ul>
-          <ul class="list-links"></ul>
+          <ul class="list-links hidden"></ul>
         </section>
       </div>
     </div>

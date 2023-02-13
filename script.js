@@ -1,6 +1,11 @@
 import { getFirstSymbol } from "./helpers.js";
 
-let opendCategory = "";
+// let state = {
+//   opendNameCategory: '',
+
+// };
+
+let opendNameCategory = "";
 
 const configClasses = {
   hidden: "hidden",
@@ -33,6 +38,7 @@ const inputNameCategory = document.querySelector(
 const inputIconCategory = document.querySelector(
   ".create-form-category__input-icon"
 );
+const subtitle = document.querySelector(".subtitle");
 
 const init = () => {
   const fromStorage = localStorage.getItem("myBookmarksExtension");
@@ -61,41 +67,55 @@ const clearInputsValues = () => {
   inputIconCategory.value = "";
 };
 
-const updateListLinks = (arr) => {
-  listLinks.innerHTML = arr.map((link) => createLink(link)).join("");
+const toggleHideClasses = (...node) => {
+  node.forEach((el) => {
+    const classList = el.classList;
+    const arrayClassList = Array.from(classList);
+
+    if (arrayClassList.includes(configClasses.hidden)) {
+      classList.remove(configClasses.hidden);
+      return;
+    }
+    classList.add(configClasses.hidden);
+  });
 };
 
-const updateCategories = () => {
-  categories.innerHTML = bookmarks
-    .map((el) => createCategory(el.category))
-    .join("");
-};
-
-updateCategories();
-
-const toggleShowForm = (node) => {
-  const classList = node.classList;
-  const arrayClassList = Array.from(classList);
-
-  if (arrayClassList.includes(configClasses.hidden)) {
-    classList.remove(configClasses.hidden);
-    return;
+const reRender = () => {
+  if (opendNameCategory) {
+    subtitle.innerHTML = opendNameCategory;
+    const category = bookmarks.find((el) => el.category === opendNameCategory);
+    if (category) {
+      listLinks.innerHTML = category?.values
+        .map((link) => createLink(link))
+        .join("");
+    }
+  } else {
+    categories.innerHTML = bookmarks
+      .map((el) => createCategory(el.category))
+      .join("");
   }
-  classList.add(configClasses.hidden);
 };
+
+reRender();
 
 const handleBack = () => {
-  opendCategory = "";
+  opendNameCategory = "";
+  toggleHideClasses(
+    categories,
+    btnShowFormCrateCategory,
+    btnShowFormCrateBookmark,
+    btnBack,
+    subtitle,
+    listLinks
+  );
+
+  reRender();
 };
 
 const addCategory = (category) => {
   bookmarks.push(category);
   localStorage.setItem("myBookmarksExtension", JSON.stringify(bookmarks));
-  updateCategories();
-};
-
-const addBookmark = (bookamark) => {
-  console.log(bookamark);
+  reRender();
 };
 
 const handleCreateCategory = (event) => {
@@ -105,7 +125,7 @@ const handleCreateCategory = (event) => {
   const newCategory = { category: name, icon };
 
   addCategory(newCategory);
-  toggleShowForm(formCreateCategory);
+  toggleHideClasses(formCreateCategory);
   clearInputsValues();
 };
 
@@ -114,7 +134,20 @@ const handleCreateBookmark = (event) => {
   const formData = new FormData(formCreateBookmark);
   const { name, link } = Object.fromEntries(formData);
 
-  console.log(name, link);
+  const newState = bookmarks.map((el) => {
+    const isValues = el.values !== undefined;
+    const values = isValues
+      ? el.category === opendNameCategory
+        ? [...el.values, { name, link }]
+        : [...el.values]
+      : [];
+
+    return { ...el, values };
+  });
+
+  bookmarks = newState;
+
+  reRender();
 };
 
 const handleOpenCategory = (event) => {
@@ -122,25 +155,25 @@ const handleOpenCategory = (event) => {
 
   if (target.tagName === "LI") {
     const category = target.getAttribute("data-category");
-    opendCategory = category;
-    showLinksCategory(category);
-  }
-};
-
-const showLinksCategory = (category) => {
-  const filteredList = bookmarks.find((el) => el.category === category);
-
-  if (filteredList.values) {
-    updateListLinks(filteredList.values);
+    opendNameCategory = category;
+    toggleHideClasses(
+      categories,
+      btnShowFormCrateCategory,
+      btnShowFormCrateBookmark,
+      btnBack,
+      subtitle,
+      listLinks
+    );
+    reRender();
   }
 };
 
 btnShowFormCrateCategory.addEventListener("click", () =>
-  toggleShowForm(formCreateCategory)
+  toggleHideClasses(formCreateCategory)
 );
 
 btnShowFormCrateBookmark.addEventListener("click", () =>
-  toggleShowForm(formCreateBookmark)
+  toggleHideClasses(formCreateBookmark)
 );
 
 categories.addEventListener("click", handleOpenCategory);
