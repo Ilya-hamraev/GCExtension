@@ -1,11 +1,14 @@
-import { getFirstSymbol } from "./helpers.js";
+import { uuid, getFirstSymbol } from "./helpers.js";
 
-// let state = {
-//   opendNameCategory: '',
+const initialState = {
+  opendNameCategory: "",
+  id: "",
+};
 
-// };
-
-let opendNameCategory = "";
+let state = {
+  opendNameCategory: "",
+  id: "",
+};
 
 const configClasses = {
   hidden: "hidden",
@@ -14,31 +17,31 @@ const configClasses = {
 let bookmarks = [
   //   {
   //     category: "test",
-  //     icon: "",
-  //     values: [{ name: "", link: "" }],
-  //   },
-  //   {
-  //     category: "feff",
+  //     id: "c9f56b53-b2a6-43f8-8456-04c2eafaf4f6"
   //     icon: "",
   //     values: [{ name: "", link: "" }],
   //   },
 ];
+
 const btnBack = document.querySelector(".button_back");
+const btnRemoveCategory = document.querySelector(".button_remove_category");
 const btnShowFormCrateCategory = document.querySelector(".button_add_category");
 const btnShowFormCrateBookmark = document.querySelector(".button_add_bookmark");
 const btnCreateCategory = document.querySelector(".button_create_category");
 const btnCreateBookmark = document.querySelector(".button_create_bookmark");
+const sectionCategories = document.querySelector(".section.categories");
+const sectionBookmarks = document.querySelector(".section.bookmarks");
+const subtitleBookmarks = document.querySelector(".subtitle__bookmarks");
 const formCreateCategory = document.querySelector(".create-form-category");
 const formCreateBookmark = document.querySelector(".create-form-bookmark");
-const categories = document.querySelector(".categories");
-const listLinks = document.querySelector(".list-links");
+const listCategories = document.querySelector(".list-categories");
+const listBookmarks = document.querySelector(".list-bookmarks");
 const inputNameCategory = document.querySelector(
   ".create-form-category__input-name"
 );
 const inputIconCategory = document.querySelector(
   ".create-form-category__input-icon"
 );
-const subtitle = document.querySelector(".subtitle");
 
 const init = () => {
   const fromStorage = localStorage.getItem("myBookmarksExtension");
@@ -50,21 +53,54 @@ const init = () => {
 
 init();
 
+const updateState = ({ name = "", id = "" }) => {
+  state = {
+    opendNameCategory: name,
+    id,
+  };
+};
+
 const createCategory = (name, icon) => {
-  return `<li class='category' data-category=${name}>${getFirstSymbol(
+  console.log("createCategory");
+  return `<li class='list-categories__item' data-category=${name} data-id=${uuid()}>${getFirstSymbol(
     name
   )}</li>`;
 };
 
 const createLink = ({ link, name }) => {
-  return `<li class='list-links__link'>
+  return `<li class='list-bookmarks__item'>
     <a href=${link} target='_blank'>${name}</a>
   </li>`;
 };
 
-const clearInputsValues = () => {
-  inputNameCategory.value = "";
-  inputIconCategory.value = "";
+const reRender = () => {
+  localStorage.setItem("myBookmarksExtension", JSON.stringify(bookmarks));
+
+  if (state.opendNameCategory) {
+    subtitleBookmarks.innerHTML = `List bookmarks from ${state.opendNameCategory}`;
+    const category = bookmarks.find((el) => el.id === state.id);
+
+    if (category) {
+      listBookmarks.innerHTML = category?.values
+        .map((link) => createLink(link))
+        .join("");
+    }
+  } else {
+    listCategories.innerHTML = bookmarks
+      .map((el) => createCategory(el.category))
+      .join("");
+  }
+};
+
+reRender();
+
+const addCategory = (category) => {
+  bookmarks.push(category);
+  reRender();
+};
+
+const clearInputsValues = (form) => {
+  //TODO reset values from inputs
 };
 
 const toggleHideClasses = (...node) => {
@@ -80,53 +116,28 @@ const toggleHideClasses = (...node) => {
   });
 };
 
-const reRender = () => {
-  if (opendNameCategory) {
-    subtitle.innerHTML = opendNameCategory;
-    const category = bookmarks.find((el) => el.category === opendNameCategory);
-    if (category) {
-      listLinks.innerHTML = category?.values
-        .map((link) => createLink(link))
-        .join("");
-    }
-  } else {
-    categories.innerHTML = bookmarks
-      .map((el) => createCategory(el.category))
-      .join("");
+const handleOpenCategory = (event) => {
+  const target = event.target;
+
+  if (target.tagName === "LI") {
+    const categoryName = target.getAttribute("data-category");
+    const categoryId = target.getAttribute("data-id");
+
+    updateState({ name: categoryName, id: categoryId });
+    toggleHideClasses(sectionCategories, sectionBookmarks);
+    reRender();
   }
-};
-
-reRender();
-
-const handleBack = () => {
-  opendNameCategory = "";
-  toggleHideClasses(
-    categories,
-    btnShowFormCrateCategory,
-    btnShowFormCrateBookmark,
-    btnBack,
-    subtitle,
-    listLinks
-  );
-
-  reRender();
-};
-
-const addCategory = (category) => {
-  bookmarks.push(category);
-  localStorage.setItem("myBookmarksExtension", JSON.stringify(bookmarks));
-  reRender();
 };
 
 const handleCreateCategory = (event) => {
   event.preventDefault;
   const formData = new FormData(formCreateCategory);
   const { name, icon } = Object.fromEntries(formData);
-  const newCategory = { category: name, icon };
+  const newCategory = { id: uuid(), category: name, icon };
 
   addCategory(newCategory);
   toggleHideClasses(formCreateCategory);
-  clearInputsValues();
+  clearInputsValues(formCreateCategory);
 };
 
 const handleCreateBookmark = (event) => {
@@ -135,37 +146,46 @@ const handleCreateBookmark = (event) => {
   const { name, link } = Object.fromEntries(formData);
 
   const newState = bookmarks.map((el) => {
-    const isValues = el.values !== undefined;
-    const values = isValues
-      ? el.category === opendNameCategory
-        ? [...el.values, { name, link }]
-        : [...el.values]
-      : [];
+    const isValues = el.values === undefined;
+    // const values = isValues
+    //   ? el.id === state.id
+    //     ? [...el.values, { name, link }]
+    //     : [...el.values]
+    //   : [];
 
-    return { ...el, values };
+    // const values = isValues
+    //   ? el.id === state.id
+    //     ? [...el.values, { name, link }]
+    //     : [...el.values]
+    //   : [];
+
+    // const values = isValues
+    //   ? [{ name, link, id: uuid() }]
+    //   : el.id === state.id
+    //   ? [...el.values, { name, link }]
+    //   : [...el.values];
+
+    // console.log(isValues);
+
+    console.log(el, state.id);
+
+    return { ...el, values: [] };
   });
 
   bookmarks = newState;
 
+  toggleHideClasses(formCreateBookmark);
   reRender();
 };
 
-const handleOpenCategory = (event) => {
+const handleRemoveCategory = (event) => {
   const target = event.target;
+};
 
-  if (target.tagName === "LI") {
-    const category = target.getAttribute("data-category");
-    opendNameCategory = category;
-    toggleHideClasses(
-      categories,
-      btnShowFormCrateCategory,
-      btnShowFormCrateBookmark,
-      btnBack,
-      subtitle,
-      listLinks
-    );
-    reRender();
-  }
+const handleBack = () => {
+  // opendNameCategory = "";
+  updateState(initialState);
+  toggleHideClasses(sectionCategories, sectionBookmarks);
 };
 
 btnShowFormCrateCategory.addEventListener("click", () =>
@@ -176,10 +196,12 @@ btnShowFormCrateBookmark.addEventListener("click", () =>
   toggleHideClasses(formCreateBookmark)
 );
 
-categories.addEventListener("click", handleOpenCategory);
+btnBack.addEventListener("click", handleBack);
 
 btnCreateCategory.addEventListener("click", handleCreateCategory);
 
 btnCreateBookmark.addEventListener("click", handleCreateBookmark);
 
-btnBack.addEventListener("click", handleBack);
+listCategories.addEventListener("click", handleOpenCategory);
+
+btnRemoveCategory.addEventListener("click", handleRemoveCategory);
