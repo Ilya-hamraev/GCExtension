@@ -9,27 +9,18 @@
   <body>
     <div class="wrapper">
       <div class="container">
-        <h2 class="title text-center mb10">
+        <h2 class="title text-center mb20">
           My bookmarks
           <image class="title__icon" src="./icon-bookmark.png" />
         </h2>
-        <h3 class="subtitle hidden"></h3>
-        <section>
-          <div class="controllers">
-            <button type="button" class="button button_add_category mb10">
+        <!-- категории -->
+        <section class="section categories">
+          <div class="controllers mb10">
+            <button type="button" class="button button_add_category">
               Add new category
             </button>
-            <button
-              type="button"
-              class="button button_add_bookmark mb10 hidden"
-            >
-              Add new link
-            </button>
-            <button type="button" class="button button_back mb10 hidden">
-              Back
-            </button>
           </div>
-          <form class="create-form create-form-category hidden">
+          <form class="create-form create-form-category hidden mb10">
             <input
               class="create-form-category__input-name mb10"
               placeholder="enter name category"
@@ -48,7 +39,27 @@
               Create
             </button>
           </form>
-          <form class="create-form create-form-bookmark hidden">
+          <h3 class="subtitle subtitle__categories mb10">Categories</h3>
+          <div class="list mb10">
+            <ul class="list-categories">
+              <!-- <li class="list-categories__item">f</li> -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- список закладок -->
+        <section class="section bookmarks hidden">
+          <div class="controllers mb10">
+            <button type="button" class="button button_add_bookmark">
+              Add new link
+            </button>
+            <button type="button" class="button button_remove_category">
+              Remove category
+            </button>
+            <button type="button" class="button button_back">Back</button>
+          </div>
+
+          <form class="create-form create-form-bookmark hidden mb10">
             <input
               class="create-form-bookmark__input-name mb10"
               placeholder="enter name link"
@@ -67,8 +78,14 @@
               Create
             </button>
           </form>
-          <ul class="categories"></ul>
-          <ul class="list-links hidden"></ul>
+          <h3 class="subtitle subtitle__bookmarks mb10"></h3>
+          <div class="list mb10">
+            <ul class="list-bookmarks">
+              <!-- <li class="list-bookmarks__item">
+                <a href="#">1</a>
+              </li> -->
+            </ul>
+          </div>
         </section>
       </div>
     </div>

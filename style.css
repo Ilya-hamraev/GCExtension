@@ -23,16 +23,8 @@ ul {
   width: 400px;
 }
 
-.mb10 {
-  margin-bottom: 10px;
-}
-
 .text-center {
   text-align: center;
-}
-
-.hidden {
-  display: none;
 }
 
 .title {
@@ -49,21 +41,27 @@ ul {
   vertical-align: bottom;
 }
 
-.subtitle.hidden {
-  display: none;
+.controllers {
+  display: flex;
+  justify-content: space-between;
 }
 
-.categories {
+.subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  background-image: linear-gradient(45deg, #553c9a, #ee4b2b);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.list-categories {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.categories.hidden {
-  display: none;
-}
-
-.category {
+.list-categories__item {
   text-transform: capitalize;
   font-size: 20px;
   display: flex;
@@ -79,7 +77,7 @@ ul {
   transition: all 0.4s;
 }
 
-.category:hover {
+.list-categories__item:hover {
   box-shadow: 8px 8px 16px #dedede, -8px -8px 16px #ffffff;
 }
 
@@ -88,19 +86,54 @@ ul {
   flex-direction: column;
 }
 
-.create-form.hidden {
-  display: none;
-}
-
 .button {
+  align-self: center;
+  background-color: #fff;
+  background-image: none;
+  background-position: 0 90%;
+  background-repeat: repeat no-repeat;
+  background-size: 4px 3px;
+  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: rgba(0, 0, 0, 0.2) 15px 28px 25px -18px;
+  box-sizing: border-box;
+  color: #41403e;
   cursor: pointer;
-  width: fit-content;
+  display: inline-block;
+  font-family: Neucha, sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  outline: none;
+  padding: 8px;
+  text-decoration: none;
+  transition: all 235ms ease-in-out;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
-.button.hidden {
+.button-55:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px -5px;
+  transform: translate3d(0, 2px, 0);
+}
+
+.button-55:focus {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 4px -6px;
+}
+
+.hidden {
   display: none;
 }
 
-.list-links.hidden {
-  display: none;
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
 }
