@@ -1,3 +1,5 @@
+import { configClasses } from "./constants.js";
+
 export const getFirstSymbol = (string) => string.slice(0, 1);
 
 export const uuid = () => {
@@ -12,4 +14,17 @@ export const uuid = () => {
       return uuid.toString(16);
     }
   );
+};
+
+export const toggleHideClasses = (...node) => {
+  node.forEach((el) => {
+    const classList = el.classList;
+    const arrayClassList = Array.from(classList);
+
+    if (arrayClassList.includes(configClasses.hidden)) {
+      classList.remove(configClasses.hidden);
+      return;
+    }
+    classList.add(configClasses.hidden);
+  });
 };
