@@ -1,5 +1,6 @@
 import { toggleHideClasses } from "./helpers.js";
 import Category from "./category.js";
+import Bookmark from "./bookmark.js";
 import {
   btnShowFormCrateCategory,
   btnCreateCategory,
@@ -17,34 +18,51 @@ import {
 
 const state = appState.getState();
 
-state.bookmarks.forEach((el) => {
-  const category = new Category(el);
+function createBookmark(name, link) {
+  return new Bookmark({ name, link });
+}
 
+function createCategory(props) {
+  return new Category(props);
+}
+
+function createFormData(props) {
+  return new FormData(props);
+}
+
+state.bookmarks.forEach((el) => {
+  const category = createCategory(el);
   const elementCategory = category.createLayout(el);
+
   listCategories.append(elementCategory);
 });
 
-const handleCreateCategory = (event) => {
-  event.preventDefault;
-  const formData = new FormData(formCreateCategory);
+const handleCreateCategory = () => {
+  const formData = createFormData(formCreateCategory);
   const { name } = Object.fromEntries(formData);
-  const category = new Category({ name });
+  const category = createCategory({ name });
   appState.addToState(category);
 
   toggleHideClasses(formCreateCategory);
 };
 
-const handleCreateBookmark = (event) => {
-  event.preventDefault;
-  const formData = new FormData(formCreateBookmark);
+const handleCreateBookmark = () => {
+  const formData = createFormData(formCreateBookmark);
   const { name, link } = Object.fromEntries(formData);
 
-  console.log(name, link);
+  const category = {
+    ...state.opendCategory,
+    values: state.opendCategory.values.length
+      ? [...state.opendCategory.values, createBookmark(name, link)]
+      : [createBookmark(name, link)],
+  };
 
+  appState.updateStateCategory(category);
   toggleHideClasses(formCreateBookmark);
 };
 
 const handleBack = () => {
+  state.handeleCloseCategory();
   toggleHideClasses(sectionCategories, sectionBookmarks);
 };
 

@@ -32,7 +32,7 @@ class Category {
   }
 
   _handleClick() {
-    subtitleBookmarks.innerHTML = this.name;
+    subtitleBookmarks.innerHTML = `Category ${this.name}`;
     appState.handleOpenCategory(this);
     toggleHideClasses(sectionCategories, sectionBookmarks);
 

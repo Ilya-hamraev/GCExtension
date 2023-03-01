@@ -28,7 +28,7 @@ class AppState {
 
     localStorage.setItem(
       keyLocalStorage,
-      JSON.stringify([...JSON.parse(this.bookmarks), element])
+      JSON.stringify([...this.bookmarks, element])
     );
   }
 
@@ -46,12 +46,25 @@ class AppState {
     this.handeleCloseCategory();
   }
 
+  updateStateCategory(element) {
+    const updatedArr = this.bookmarks.map((item) =>
+      item.id === element.id ? element : item
+    );
+
+    this.updateState(updatedArr);
+  }
+
   handleOpenCategory(el) {
     this.opendCategory = el;
   }
 
   handeleCloseCategory() {
     this.opendCategory = null;
+  }
+
+  updateState(bookmarks) {
+    localStorage.setItem(keyLocalStorage, JSON.stringify(bookmarks));
+    this.bookmarks = bookmarks;
   }
 }
 
