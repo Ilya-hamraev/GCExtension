@@ -32,7 +32,7 @@ function createFormData(props) {
 
 state.bookmarks.forEach((el) => {
   const category = createCategory(el);
-  const elementCategory = category.createLayout(el);
+  const elementCategory = category.createHTMLElement(el);
 
   listCategories.append(elementCategory);
 });
@@ -41,15 +41,14 @@ const handleCreateCategory = () => {
   const formData = createFormData(formCreateCategory);
   const { name } = Object.fromEntries(formData);
   const category = createCategory({ name });
-  appState.addToState(category);
 
+  appState.addToState(category);
   toggleHideClasses(formCreateCategory);
 };
 
 const handleCreateBookmark = () => {
   const formData = createFormData(formCreateBookmark);
   const { name, link } = Object.fromEntries(formData);
-
   const category = {
     ...state.opendCategory,
     values: state.opendCategory.values.length
@@ -67,19 +66,18 @@ const handleBack = () => {
 };
 
 const handleRemoveCategory = () => {
-  const id = state.opendCategory.id;
-  state.removeFromState(id);
+  const idCategory = state.opendCategory.id;
+
+  state.removeFromState(idCategory);
   handleBack();
 };
 
 btnShowFormCrateCategory.addEventListener("click", () =>
   toggleHideClasses(formCreateCategory)
 );
-
 btnShowFormCrateBookmark.addEventListener("click", () =>
   toggleHideClasses(formCreateBookmark)
 );
-
 btnCreateBookmark.addEventListener("click", handleCreateBookmark);
 btnRemoveCategory.addEventListener("click", handleRemoveCategory);
 btnCreateCategory.addEventListener("click", handleCreateCategory);

@@ -19,7 +19,7 @@ class Category {
     appState.removeFromState(id);
   }
 
-  createLayout({ name, id }) {
+  createHTMLElement({ name, id }) {
     const elementCategory = document.createElement("li");
     elementCategory.classList.add("list-categories__item");
     elementCategory.setAttribute("data-id", id);
@@ -39,7 +39,7 @@ class Category {
     if (this.values.length) {
       this.values.map((el) => {
         const bookmark = new Bookmark(el);
-        const elementLi = bookmark.createLayout(el);
+        const elementLi = bookmark.createHTMLElement(el);
         listBookmarks.append(elementLi);
       });
     }
