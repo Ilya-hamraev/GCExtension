@@ -6,6 +6,12 @@ class AppState {
   constructor() {
     this.bookmarks = JSON.parse(storage) || [];
     this.opendCategory = null;
+    this._setItemStorage = (props) => {
+      localStorage.setItem(keyLocalStorage, JSON.stringify(props));
+    };
+    this._clearStorage = () => {
+      localStorage.removeItem(keyLocalStorage);
+    };
   }
 
   getState() {
@@ -14,22 +20,18 @@ class AppState {
 
   clearState() {
     if (storage) {
-      localStorage.removeItem(keyLocalStorage);
+      this._clearStorage();
       this.bookmarks = [];
     }
   }
 
   addToState(element) {
     if (!storage) {
-      localStorage.setItem(keyLocalStorage, JSON.stringify([element]));
-
+      this._setItemStorage([element]);
       return;
     }
 
-    localStorage.setItem(
-      keyLocalStorage,
-      JSON.stringify([...this.bookmarks, element])
-    );
+    this._setItemStorage([...this.bookmarks, element]);
   }
 
   removeFromState(id) {
@@ -37,9 +39,7 @@ class AppState {
 
     if (arr.length) {
       const filteredStorage = arr.filter((el) => el.id !== id);
-
-      localStorage.setItem(keyLocalStorage, JSON.stringify(filteredStorage));
-
+      this._setItemStorage(filteredStorage);
       this.bookmarks = filteredStorage;
     }
 
@@ -47,11 +47,11 @@ class AppState {
   }
 
   updateStateCategory(element) {
-    const updatedArr = this.bookmarks.map((item) =>
-      item.id === element.id ? element : item
+    const updatedCategory = this.bookmarks.map((category) =>
+      category.id === element.id ? element : category
     );
 
-    this.updateState(updatedArr);
+    this._updateState(updatedCategory);
   }
 
   handleOpenCategory(el) {
@@ -62,8 +62,9 @@ class AppState {
     this.opendCategory = null;
   }
 
-  updateState(bookmarks) {
-    localStorage.setItem(keyLocalStorage, JSON.stringify(bookmarks));
+  _updateState(bookmarks) {
+    this._setItemStorage(bookmarks);
+
     this.bookmarks = bookmarks;
   }
 }

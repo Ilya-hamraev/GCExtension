@@ -21,19 +21,19 @@ const btnBack = document.querySelector(".button_back");
 const btnRemoveCategory = document.querySelector(".button_remove_category");
 
 export {
+  btnBack,
   appState,
   configClasses,
   btnShowFormCrateCategory,
+  btnShowFormCrateBookmark,
   formCreateCategory,
+  formCreateBookmark,
   btnCreateCategory,
+  btnCreateBookmark,
   listCategories,
+  listBookmarks,
   sectionCategories,
   sectionBookmarks,
   subtitleBookmarks,
-  btnBack,
   btnRemoveCategory,
-  btnShowFormCrateBookmark,
-  formCreateBookmark,
-  listBookmarks,
-  btnCreateBookmark,
 };

@@ -1,14 +1,13 @@
 import { toggleHideClasses } from "./helpers.js";
 import Category from "./category.js";
 import Bookmark from "./bookmark.js";
+import Form from "./form.js";
 import {
   btnShowFormCrateCategory,
   btnCreateCategory,
   formCreateCategory,
-  listCategories,
   sectionCategories,
   sectionBookmarks,
-  btnRemoveCategory,
   btnShowFormCrateBookmark,
   formCreateBookmark,
   btnCreateBookmark,
@@ -26,35 +25,40 @@ function createCategory(props) {
   return new Category(props);
 }
 
-function createFormData(props) {
-  return new FormData(props);
+function createForm(props) {
+  return new Form(props);
 }
 
 state.bookmarks.forEach((el) => {
   const category = createCategory(el);
-  const elementCategory = category.createLayout(el);
-
-  listCategories.append(elementCategory);
+  category.createElement(el);
 });
 
 const handleCreateCategory = () => {
-  const formData = createFormData(formCreateCategory);
-  const { name } = Object.fromEntries(formData);
+  const form = createForm(formCreateCategory);
+  const { name } = form.getValues();
   const category = createCategory({ name });
-  appState.addToState(category);
+  const categoryInfo = category.getInfo();
 
+  category.createElement(categoryInfo);
+  appState.addToState(categoryInfo);
   toggleHideClasses(formCreateCategory);
 };
 
 const handleCreateBookmark = () => {
-  const formData = createFormData(formCreateBookmark);
-  const { name, link } = Object.fromEntries(formData);
+  const form = createForm(formCreateBookmark);
+  const { name, link } = form.getValues();
+  const opendCategory = state.opendCategory;
+
+  const bookmark = createBookmark(name, link);
+  const infoBookmark = bookmark.getInfo();
+  bookmark.createElement();
 
   const category = {
-    ...state.opendCategory,
-    values: state.opendCategory.values.length
-      ? [...state.opendCategory.values, createBookmark(name, link)]
-      : [createBookmark(name, link)],
+    ...opendCategory,
+    values: opendCategory.values.length
+      ? [...opendCategory.values, infoBookmark]
+      : [infoBookmark],
   };
 
   appState.updateStateCategory(category);
@@ -66,21 +70,12 @@ const handleBack = () => {
   toggleHideClasses(sectionCategories, sectionBookmarks);
 };
 
-const handleRemoveCategory = () => {
-  const id = state.opendCategory.id;
-  state.removeFromState(id);
-  handleBack();
-};
-
 btnShowFormCrateCategory.addEventListener("click", () =>
   toggleHideClasses(formCreateCategory)
 );
-
 btnShowFormCrateBookmark.addEventListener("click", () =>
   toggleHideClasses(formCreateBookmark)
 );
-
 btnCreateBookmark.addEventListener("click", handleCreateBookmark);
-btnRemoveCategory.addEventListener("click", handleRemoveCategory);
 btnCreateCategory.addEventListener("click", handleCreateCategory);
 btnBack.addEventListener("click", handleBack);

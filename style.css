@@ -53,6 +53,10 @@ ul {
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .list-categories {
@@ -79,6 +83,27 @@ ul {
 
 .list-categories__item:hover {
   box-shadow: 8px 8px 16px #dedede, -8px -8px 16px #ffffff;
+}
+
+.list-bookmarks__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.list-bookmarks__link {
+  text-decoration: none;
+  font-size: 16px;
+  color: #ff0000;
+}
+
+.list-bookmarks__controllers .button {
+  margin-right: 5px;
+}
+
+.list-bookmarks__controllers .button:last-child {
+  margin-right: 0;
 }
 
 .create-form {
