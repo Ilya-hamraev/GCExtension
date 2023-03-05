@@ -16,7 +16,7 @@ class Bookmark {
     };
   }
 
-  createElement() {
+  createTemplate() {
     const liElement = document.createElement("li");
     liElement.classList.add("list-bookmarks__item");
     const link = document.createElement("a");
