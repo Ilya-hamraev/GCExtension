@@ -4,45 +4,66 @@ import {
   appState,
   sectionCategories,
   sectionBookmarks,
-  listBookmarks,
+  listCategories,
   subtitleBookmarks,
 } from "./constants.js";
 
 class Category {
   constructor({ name = "", id = uuid(), values = [] }) {
-    this.name = name;
-    this.id = id;
-    this.values = values;
+    this._name = name;
+    this._id = id;
+    this._values = values;
   }
 
-  remove(id) {
-    appState.removeFromState(id);
+  getInfo() {
+    return {
+      name: this._name,
+      id: this._id,
+      values: this._values,
+    };
   }
 
-  createHTMLElement({ name, id }) {
+  createElement() {
     const elementCategory = document.createElement("li");
     elementCategory.classList.add("list-categories__item");
-    elementCategory.setAttribute("data-id", id);
     const elementCategoryTitle = document.createElement("h4");
-    elementCategoryTitle.innerHTML = getFirstSymbol(name);
+    elementCategoryTitle.innerHTML = getFirstSymbol(this._name);
     elementCategory.append(elementCategoryTitle);
     elementCategory.addEventListener("click", this._handleClick.bind(this));
 
-    return elementCategory;
+    this._elementHTML = elementCategory;
+    listCategories.append(elementCategory);
   }
 
   _handleClick() {
-    subtitleBookmarks.innerHTML = `Category ${this.name}`;
-    appState.handleOpenCategory(this);
+    const btnRemoveCategory = document.createElement("button");
+    btnRemoveCategory.innerHTML = "Remove Category";
+    btnRemoveCategory.classList.add("button");
+    btnRemoveCategory.addEventListener("click", this._remove.bind(this));
+
+    subtitleBookmarks.innerHTML = `Category ${this._name}`;
+    subtitleBookmarks.append(btnRemoveCategory);
+
+    appState.handleOpenCategory({
+      name: this._name,
+      id: this._id,
+      values: this._values,
+    });
+
     toggleHideClasses(sectionCategories, sectionBookmarks);
 
-    if (this.values.length) {
-      this.values.map((el) => {
+    if (this._values.length) {
+      this._values.map((el) => {
         const bookmark = new Bookmark(el);
-        const elementLi = bookmark.createHTMLElement(el);
-        listBookmarks.append(elementLi);
+        bookmark.createElement(el);
       });
     }
+  }
+
+  _remove() {
+    this._elementHTML.remove();
+    appState.removeFromState(this._id);
+    toggleHideClasses(sectionCategories, sectionBookmarks);
   }
 }
 
