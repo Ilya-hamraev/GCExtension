@@ -13,13 +13,7 @@
   "web_accessible_resources": [
     {
       "matches": ["<all_urls>"],
-      "resources": [
-        "./script.js",
-        "./helpers.js",
-        "./category.js",
-        "./state.js",
-        "./constants.js"
-      ]
+      "resources": ["./script.js", "./utils/helpers.js"]
     }
   ]
 }

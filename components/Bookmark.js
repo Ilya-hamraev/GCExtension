@@ -1,5 +1,5 @@
-import { uuid, toggleHideClasses } from "./helpers.js";
-import { appState, formCreateBookmark, listBookmarks } from "./constants.js";
+import { uuid, toggleHideClasses } from "../utils/helpers.js";
+import { appState, formCreateBookmark } from "../utils/constants.js";
 
 class Bookmark {
   constructor(

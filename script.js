@@ -1,7 +1,7 @@
-import { toggleHideClasses } from "./helpers.js";
-import Category from "./category.js";
-import Bookmark from "./bookmark.js";
-import Form from "./form.js";
+import { toggleHideClasses } from "./utils/helpers.js";
+import Category from "./components/Category.js";
+import Bookmark from "./components/Bookmark.js";
+import Form from "./components/Form.js";
 import {
   btnShowFormCrateCategory,
   btnCreateCategory,
@@ -15,7 +15,7 @@ import {
   appState,
   listCategories,
   listBookmarks,
-} from "./constants.js";
+} from "./utils/constants.js";
 
 const state = appState.getState();
 
