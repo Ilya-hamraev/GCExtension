@@ -5,6 +5,7 @@ import {
   sectionCategories,
   sectionBookmarks,
   subtitleBookmarks,
+  listBookmarks,
 } from "./constants.js";
 
 class Category {
@@ -72,8 +73,10 @@ class Category {
 
     if (this._values.length) {
       this._values.map((el) => {
-        const bookmark = new Bookmark(el);
-        bookmark.createElement(el);
+        const bookmark = new Bookmark(el, ".list-bookmarks__item");
+        const bookmarkElement = bookmark.generateBookmark();
+
+        listBookmarks.append(bookmarkElement);
       });
     }
   }

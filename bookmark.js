@@ -2,10 +2,14 @@ import { uuid, toggleHideClasses } from "./helpers.js";
 import { appState, formCreateBookmark, listBookmarks } from "./constants.js";
 
 class Bookmark {
-  constructor({ name = "", link = "", id = uuid() }) {
+  constructor(
+    { name = "", link = "", id = uuid() },
+    templateSelector = ".list-bookmarks__item"
+  ) {
     this._name = name;
     this._link = link;
     this._id = id;
+    this._templateSelector = templateSelector;
   }
 
   getInfo() {
@@ -16,34 +20,37 @@ class Bookmark {
     };
   }
 
-  createTemplate() {
-    const liElement = document.createElement("li");
-    liElement.classList.add("list-bookmarks__item");
-    const link = document.createElement("a");
-    link.innerHTML = this._name;
-    link.classList.add("list-bookmarks__link");
+  _getTemplate() {
+    const template = document.querySelector(".bookmark-template");
+    const bookmarkElement = template.content
+      .querySelector(this._templateSelector)
+      .cloneNode(true);
+
+    return bookmarkElement;
+  }
+
+  generateBookmark() {
+    this._element = this._getTemplate();
+    this._setEventListeners();
+
+    const link = this._element.querySelector(".list-bookmarks__link");
+    link.textContent = this._name;
     link.setAttribute("href", this._link);
     link.setAttribute("target", "_blank");
 
-    const controllersWrap = document.createElement("div");
-    controllersWrap.classList.add("list-bookmarks__controllers");
+    this._element.querySelector(".bookmark_remove").textContent = "Remove";
+    this._element.querySelector(".bookmark_edit").textContent = "Edit";
 
-    const removeBtn = document.createElement("button");
-    removeBtn.innerHTML = "Remove";
-    removeBtn.classList.add("button");
-    removeBtn.addEventListener("click", this._remove.bind(this));
+    return this._element;
+  }
 
-    const editBtn = document.createElement("button");
-    editBtn.innerHTML = "Edit";
-    editBtn.classList.add("button");
-    editBtn.addEventListener("click", this._edit.bind(this));
-
-    controllersWrap.append(removeBtn, editBtn);
-    liElement.append(link, controllersWrap);
-
-    this._element = liElement;
-
-    listBookmarks.append(liElement);
+  _setEventListeners() {
+    this._element
+      .querySelector(".bookmark_remove")
+      .addEventListener("click", () => this._remove());
+    this._element
+      .querySelector(".bookmark_edit")
+      .addEventListener("click", () => this._edit());
   }
 
   _remove() {
@@ -56,9 +63,8 @@ class Bookmark {
         : category.values,
     };
 
-    appState.updateStateCategory(updatedCatrgory);
-
     this._element.remove();
+    appState.updateStateCategory(updatedCatrgory);
   }
 
   _edit() {

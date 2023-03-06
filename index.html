@@ -9,7 +9,7 @@
   <body>
     <div class="wrapper">
       <div class="container">
-        <h2 class="title text-center mb20">
+        <h2 title="My bookmarks" class="title text-center mb20">
           My bookmarks
           <image class="title__icon" src="./icon-bookmark.png" />
         </h2>
@@ -39,7 +39,10 @@
               Create
             </button>
           </form>
-          <h3 class="subtitle subtitle__categories text-center mb10">
+          <h3
+            title="Categories"
+            class="subtitle subtitle__categories text-center mb10"
+          >
             Categories
           </h3>
           <div class="list mb10">
@@ -91,8 +94,8 @@
                 <li class="list-bookmarks__item">
                   <a class="list-bookmarks__link" href="#"></a>
                   <div class="list-bookmarks__controllers">
-                    <button class="button list-bookmarks__btn">Remove</button>
-                    <button class="button list-bookmarks__btn">Edit</button>
+                    <button class="button bookmark_remove">Remove</button>
+                    <button class="button bookmark_edit">Edit</button>
                   </div>
                 </li>
               </template>

@@ -14,12 +14,13 @@ import {
   btnBack,
   appState,
   listCategories,
+  listBookmarks,
 } from "./constants.js";
 
 const state = appState.getState();
 
 function createBookmark(name, link) {
-  return new Bookmark({ name, link });
+  return new Bookmark({ name, link }, ".list-bookmarks__item");
 }
 
 function createCategory(props) {
@@ -56,7 +57,7 @@ const handleCreateBookmark = () => {
 
   const bookmark = createBookmark(name, link);
   const infoBookmark = bookmark.getInfo();
-  bookmark.createTemplate();
+  const bookmarkElement = bookmark.generateBookmark();
 
   const category = {
     ...opendCategory,
@@ -65,6 +66,7 @@ const handleCreateBookmark = () => {
       : [infoBookmark],
   };
 
+  listBookmarks.append(bookmarkElement);
   appState.updateStateCategory(category);
   toggleHideClasses(formCreateBookmark);
 };
