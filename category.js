@@ -4,15 +4,16 @@ import {
   appState,
   sectionCategories,
   sectionBookmarks,
-  listCategories,
   subtitleBookmarks,
+  listBookmarks,
 } from "./constants.js";
 
 class Category {
-  constructor({ name = "", id = uuid(), values = [] }) {
+  constructor({ name = "", id = uuid(), values = [] }, templateSelector) {
     this._name = name;
     this._id = id;
     this._values = values;
+    this._templateSelector = templateSelector;
   }
 
   getInfo() {
@@ -23,26 +24,44 @@ class Category {
     };
   }
 
-  createElement() {
-    const elementCategory = document.createElement("li");
-    elementCategory.classList.add("list-categories__item");
-    const elementCategoryTitle = document.createElement("h4");
-    elementCategoryTitle.innerHTML = getFirstSymbol(this._name);
-    elementCategory.append(elementCategoryTitle);
-    elementCategory.addEventListener("click", this._handleClick.bind(this));
+  _getTemplate() {
+    const template = document.querySelector(".category-template");
+    const categoryElement = template.content
+      .querySelector(this._templateSelector)
+      .cloneNode(true);
 
-    this._elementHTML = elementCategory;
-    listCategories.append(elementCategory);
+    return categoryElement;
   }
 
-  _handleClick() {
-    const btnRemoveCategory = document.createElement("button");
-    btnRemoveCategory.innerHTML = "Remove Category";
-    btnRemoveCategory.classList.add("button");
-    btnRemoveCategory.addEventListener("click", this._remove.bind(this));
+  generateCategory() {
+    this._element = this._getTemplate();
+    this._setEventListeners();
+
+    this._element.querySelector(".list-categories__item_title").textContent =
+      getFirstSymbol(this._name);
+
+    return this._element;
+  }
+
+  _templateRemoveButton() {
+    const templateRemoveBtn = document.createElement("button");
+    templateRemoveBtn.innerHTML = "Remove Category";
+    templateRemoveBtn.classList.add("button");
+
+    return templateRemoveBtn;
+  }
+
+  _setEventListeners() {
+    this._element.addEventListener("click", () => this._handleOpenCategory());
+  }
+
+  _handleOpenCategory() {
+    const removeBtn = this._templateRemoveButton();
+    this._removeButton = removeBtn;
+    removeBtn.addEventListener("click", () => this._handleRemoveCategory());
 
     subtitleBookmarks.innerHTML = `Category ${this._name}`;
-    subtitleBookmarks.append(btnRemoveCategory);
+    subtitleBookmarks.append(removeBtn);
 
     appState.handleOpenCategory({
       name: this._name,
@@ -54,14 +73,16 @@ class Category {
 
     if (this._values.length) {
       this._values.map((el) => {
-        const bookmark = new Bookmark(el);
-        bookmark.createElement(el);
+        const bookmark = new Bookmark(el, ".list-bookmarks__item");
+        const bookmarkElement = bookmark.generateBookmark();
+
+        listBookmarks.append(bookmarkElement);
       });
     }
   }
 
-  _remove() {
-    this._elementHTML.remove();
+  _handleRemoveCategory() {
+    this._element.remove();
     appState.removeFromState(this._id);
     toggleHideClasses(sectionCategories, sectionBookmarks);
   }

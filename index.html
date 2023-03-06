@@ -9,7 +9,7 @@
   <body>
     <div class="wrapper">
       <div class="container">
-        <h2 class="title text-center mb20">
+        <h2 title="My bookmarks" class="title text-center mb20">
           My bookmarks
           <image class="title__icon" src="./icon-bookmark.png" />
         </h2>
@@ -17,7 +17,7 @@
         <section class="section categories">
           <div class="controllers mb10">
             <button type="button" class="button button_add_category">
-              Add new category
+              Add category
             </button>
           </div>
           <form class="create-form create-form-category hidden mb10">
@@ -39,12 +39,19 @@
               Create
             </button>
           </form>
-          <h3 class="subtitle subtitle__categories text-center mb10">
+          <h3
+            title="Categories"
+            class="subtitle subtitle__categories text-center mb10"
+          >
             Categories
           </h3>
           <div class="list mb10">
             <ul class="list-categories">
-              <!-- <li class="list-categories__item">f</li> -->
+              <template class="category-template">
+                <li class="list-categories__item">
+                  <h4 class="list-categories__item_title"></h4>
+                </li>
+              </template>
             </ul>
           </div>
         </section>
@@ -53,7 +60,7 @@
         <section class="section bookmarks hidden">
           <div class="controllers mb10">
             <button type="button" class="button button_add_bookmark">
-              Add new link
+              Add bookmark
             </button>
             <!-- <button type="button" class="button button_remove_category">
               Remove category
@@ -83,14 +90,15 @@
           <div class="subtitle subtitle__bookmarks mb10"></div>
           <div class="list mb10">
             <ul class="list-bookmarks">
-              <!-- <li class="list-bookmarks__item">
-                <a class="list-bookmarks__link" href="#">1</a>
-
-                <div class="list-bookmarks__controllers">
-                  <button class="button list-bookmarks__btn">Remove</button>
-                  <button class="button list-bookmarks__btn">Edit</button>
-                </div>
-              </li> -->
+              <template class="bookmark-template">
+                <li class="list-bookmarks__item">
+                  <a class="list-bookmarks__link" href="#"></a>
+                  <div class="list-bookmarks__controllers">
+                    <button class="button bookmark_remove">Remove</button>
+                    <button class="button bookmark_edit">Edit</button>
+                  </div>
+                </li>
+              </template>
             </ul>
           </div>
         </section>
