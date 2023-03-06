@@ -1,4 +1,4 @@
-import AppState from "./state.js";
+import AppState from "../components/State.js";
 
 const configClasses = {
   hidden: "hidden",

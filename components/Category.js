@@ -1,12 +1,12 @@
-import { uuid, getFirstSymbol, toggleHideClasses } from "./helpers.js";
-import Bookmark from "./bookmark.js";
+import { uuid, getFirstSymbol, toggleHideClasses } from "../utils/helpers.js";
+import Bookmark from "./Bookmark.js";
 import {
   appState,
   sectionCategories,
   sectionBookmarks,
   subtitleBookmarks,
   listBookmarks,
-} from "./constants.js";
+} from "../utils/constants.js";
 
 class Category {
   constructor({ name = "", id = uuid(), values = [] }, templateSelector) {
