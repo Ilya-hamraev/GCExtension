@@ -2,6 +2,7 @@ import { toggleHideClasses } from "./utils/helpers.js";
 import Category from "./components/Category.js";
 import Bookmark from "./components/Bookmark.js";
 import Form from "./components/Form.js";
+import AppState from "./components/State.js";
 import {
   btnShowFormCrateCategory,
   btnCreateCategory,
@@ -12,12 +13,11 @@ import {
   formCreateBookmark,
   btnCreateBookmark,
   btnBack,
-  appState,
   listCategories,
   listBookmarks,
 } from "./utils/constants.js";
 
-const state = appState.getState();
+const state = AppState.getState();
 
 function createBookmark(name, link) {
   return new Bookmark({ name, link }, ".list-bookmarks__item");
@@ -31,7 +31,7 @@ function createForm(props) {
   return new Form(props);
 }
 
-state.bookmarks.forEach((el) => {
+state.categories.forEach((el) => {
   const category = createCategory(el);
   const categoryElement = category.generateCategory();
 
@@ -46,7 +46,7 @@ const handleCreateCategory = () => {
   const categoryElement = category.generateCategory();
 
   listCategories.append(categoryElement);
-  appState.addToState(categoryInfo);
+  AppState.handleAddCategory(categoryInfo);
   toggleHideClasses(formCreateCategory);
 };
 
@@ -67,12 +67,16 @@ const handleCreateBookmark = () => {
   };
 
   listBookmarks.append(bookmarkElement);
-  appState.updateStateCategory(category);
+  AppState.handleUpdateCategory(category);
   toggleHideClasses(formCreateBookmark);
 };
 
 const handleBack = () => {
   state.handeleCloseCategory();
+  // const items = document.querySelectorAll(".list-bookmarks__item");
+  // const arrBookmarks = Array.from(items);
+
+  // for (let link of arrBookmarks) link.remove();
   toggleHideClasses(sectionCategories, sectionBookmarks);
 };
 

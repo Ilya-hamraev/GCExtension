@@ -1,5 +1,6 @@
 import { uuid, toggleHideClasses } from "../utils/helpers.js";
-import { appState, formCreateBookmark } from "../utils/constants.js";
+import { formCreateBookmark } from "../utils/constants.js";
+import appState from "./State.js";
 
 class Bookmark {
   constructor(
@@ -64,7 +65,7 @@ class Bookmark {
     };
 
     this._element.remove();
-    appState.updateStateCategory(updatedCatrgory);
+    appState.handleUpdateCategory(updatedCatrgory);
   }
 
   _edit() {
