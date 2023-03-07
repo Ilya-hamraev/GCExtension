@@ -1,7 +1,7 @@
 import { uuid, getFirstSymbol, toggleHideClasses } from "../utils/helpers.js";
 import Bookmark from "./Bookmark.js";
+import appState from "./State.js";
 import {
-  appState,
   sectionCategories,
   sectionBookmarks,
   subtitleBookmarks,
@@ -83,7 +83,7 @@ class Category {
 
   _handleRemoveCategory() {
     this._element.remove();
-    appState.removeFromState(this._id);
+    appState.handleRemoveCategory(this._id);
     toggleHideClasses(sectionCategories, sectionBookmarks);
   }
 }

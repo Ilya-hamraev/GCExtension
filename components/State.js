@@ -2,71 +2,66 @@ const keyLocalStorage = "myBookmarksExtension";
 
 const storage = localStorage.getItem(keyLocalStorage);
 
-class AppState {
+class State {
   constructor() {
-    this.bookmarks = JSON.parse(storage) || [];
-    this.opendCategory = null;
-    this._setItemStorage = (props) => {
-      localStorage.setItem(keyLocalStorage, JSON.stringify(props));
-    };
-    this._clearStorage = () => {
-      localStorage.removeItem(keyLocalStorage);
+    this._categories = null;
+    this._opendCategory = null;
+  }
+
+  init() {
+    this._categories = JSON.parse(storage) || [];
+    this._clearStorage = () => localStorage.removeItem(keyLocalStorage);
+    this._updateStorage = (nextState) => {
+      localStorage.setItem(keyLocalStorage, JSON.stringify(nextState));
     };
   }
 
   getState() {
-    return this;
+    return {
+      opendCategory: this._opendCategory,
+      categories: this._categories,
+    };
   }
 
-  clearState() {
-    if (storage) {
-      this._clearStorage();
-      this.bookmarks = [];
+  _updateCategories(categories) {
+    this._categories = categories;
+    this._updateStorage(categories);
+  }
+
+  handleUpdateCategory(category) {
+    const idxItem = this._categories.findIndex((el) => el.id === category.id);
+
+    if (idxItem !== -1) {
+      const newState = [...this._categories];
+      newState[idxItem] = category;
+
+      this._updateCategories(newState);
     }
   }
 
-  addToState(element) {
-    if (!storage) {
-      this._setItemStorage([element]);
-      return;
-    }
+  handleAddCategory(newCategory) {
+    const newState = [...this._categories, newCategory];
 
-    this._setItemStorage([...this.bookmarks, element]);
+    this._updateCategories(newState);
   }
 
-  removeFromState(id) {
-    const arr = JSON.parse(storage) || [];
+  handleRemoveCategory(id) {
+    const newState = this._categories.filter((category) => category.id !== id);
 
-    if (arr.length) {
-      const filteredStorage = arr.filter((el) => el.id !== id);
-      this._setItemStorage(filteredStorage);
-      this.bookmarks = filteredStorage;
-    }
-
-    this.handeleCloseCategory();
+    this._updateCategories(newState);
   }
 
-  updateStateCategory(element) {
-    const updatedCategory = this.bookmarks.map((category) =>
-      category.id === element.id ? element : category
-    );
-
-    this._updateState(updatedCategory);
+  handleOpenCategory(category) {
+    this._opendCategory = category;
   }
 
-  handleOpenCategory(el) {
-    this.opendCategory = el;
-  }
-
-  handeleCloseCategory() {
-    this.opendCategory = null;
-  }
-
-  _updateState(bookmarks) {
-    this._setItemStorage(bookmarks);
-
-    this.bookmarks = bookmarks;
+  handleCloseCategory() {
+    this._opendCategory = null;
   }
 }
 
-export default AppState;
+const appState = new State();
+
+appState.init();
+
+export default appState;
