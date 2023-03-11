@@ -10,6 +10,8 @@ class Form {
 
   clearForm() {}
 
+  _getTemplate() {}
+
   generateTemplate() {}
 }
 

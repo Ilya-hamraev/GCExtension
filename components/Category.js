@@ -63,6 +63,8 @@ class Category {
     subtitleBookmarks.innerHTML = `Category ${this._name}`;
     subtitleBookmarks.append(removeBtn);
 
+    this._values = appState._categories.find((el) => el.id === this._id).values;
+
     appState.handleOpenCategory({
       name: this._name,
       id: this._id,
@@ -70,15 +72,15 @@ class Category {
     });
 
     toggleHideClasses(sectionCategories, sectionBookmarks);
+    this._renderListBookmark();
+  }
 
-    if (this._values.length) {
-      this._values.map((el) => {
-        const bookmark = new Bookmark(el, ".list-bookmarks__item");
-        const bookmarkElement = bookmark.generateBookmark();
-
-        listBookmarks.append(bookmarkElement);
-      });
-    }
+  _renderListBookmark() {
+    this._values.map((el) => {
+      const bookmark = new Bookmark(el, ".list-bookmarks__item");
+      const bookmarkElement = bookmark.generateBookmark();
+      listBookmarks.append(bookmarkElement);
+    });
   }
 
   _handleRemoveCategory() {

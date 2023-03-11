@@ -1,8 +1,8 @@
 import { toggleHideClasses } from "./utils/helpers.js";
 import Category from "./components/Category.js";
 import Bookmark from "./components/Bookmark.js";
-import Form from "./components/Form.js";
 import AppState from "./components/State.js";
+import Form from "./components/Form.js";
 import {
   btnShowFormCrateCategory,
   btnCreateCategory,
@@ -12,12 +12,12 @@ import {
   btnShowFormCrateBookmark,
   formCreateBookmark,
   btnCreateBookmark,
-  btnBack,
   listCategories,
   listBookmarks,
+  btnBack,
 } from "./utils/constants.js";
 
-const state = AppState.getState();
+const { categories } = AppState.getState();
 
 function createBookmark(name, link) {
   return new Bookmark({ name, link }, ".list-bookmarks__item");
@@ -31,7 +31,7 @@ function createForm(props) {
   return new Form(props);
 }
 
-state.categories.forEach((el) => {
+categories.forEach((el) => {
   const category = createCategory(el);
   const categoryElement = category.generateCategory();
 
@@ -53,17 +53,17 @@ const handleCreateCategory = () => {
 const handleCreateBookmark = () => {
   const form = createForm(formCreateBookmark);
   const { name, link } = form.getValues();
-  const opendCategory = state.opendCategory;
+  const { opendCategory } = AppState.getState();
 
   const bookmark = createBookmark(name, link);
-  const infoBookmark = bookmark.getInfo();
+  const currentBookmark = bookmark.getInfo();
   const bookmarkElement = bookmark.generateBookmark();
 
   const category = {
     ...opendCategory,
     values: opendCategory.values.length
-      ? [...opendCategory.values, infoBookmark]
-      : [infoBookmark],
+      ? [...opendCategory.values, currentBookmark]
+      : [currentBookmark],
   };
 
   listBookmarks.append(bookmarkElement);
@@ -72,11 +72,11 @@ const handleCreateBookmark = () => {
 };
 
 const handleBack = () => {
-  state.handeleCloseCategory();
-  // const items = document.querySelectorAll(".list-bookmarks__item");
-  // const arrBookmarks = Array.from(items);
+  AppState.handleCloseCategory();
+  const items = document.querySelectorAll(".list-bookmarks__item");
+  const arrBookmarks = Array.from(items);
 
-  // for (let link of arrBookmarks) link.remove();
+  for (let link of arrBookmarks) link.remove();
   toggleHideClasses(sectionCategories, sectionBookmarks);
 };
 
